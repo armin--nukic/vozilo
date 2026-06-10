@@ -1,0 +1,46 @@
+{
+  "navigation": {
+    "language": "Change language"
+  },
+  "home": {
+    "brand": "Vozilo.ba",
+    "market": "Bosnia and Herzegovina",
+    "navLabel": "Main navigation",
+    "login": "Log in",
+    "eyebrow": "Service history, costs, and community in one place",
+    "headline": "Smart vehicle management for real drivers in Bosnia and Herzegovina.",
+    "subheadline": "Track maintenance, registration, insurance, issues, workshop recommendations, and AI mechanic guidance with localization from day one.",
+    "primaryAction": "Add vehicle",
+    "secondaryAction": "Find workshop",
+    "stats": [
+      {"value": "1", "label": "vehicle on the free plan"},
+      {"value": "80%+", "label": "target test coverage"},
+      {"value": "2", "label": "languages from first release"}
+    ],
+    "dashboard": {
+      "vehicleLabel": "Active vehicle",
+      "vehicle": "Skoda Karoq 2.0 TDI",
+      "status": "Healthy",
+      "mileage": "Mileage",
+      "costs": "Costs this year",
+      "remindersTitle": "Next reminders"
+    },
+    "reminders": [
+      "Registration expires in 28 days",
+      "Oil change due in 1,600 km",
+      "Brake inspection recommended this month"
+    ],
+    "modulesEyebrow": "Modules",
+    "modulesTitle": "Platform foundation",
+    "modules": [
+      {"title": "Vehicles", "description": "Make, model, year, engine, VIN, license plate, and current mileage."},
+      {"title": "Service history", "description": "Oil, timing belt, DSG, brakes, tires, battery, and custom maintenance records."},
+      {"title": "Expenses", "description": "Fuel, service, insurance, registration, tires, and monthly statistics."},
+      {"title": "Reminders", "description": "Automatic deadlines for registration, insurance, and service intervals."},
+      {"title": "Workshops", "description": "Search by city, category, and brand specialization."},
+      {"title": "Authorized centers", "description": "Dedicated pages for VW, Skoda, Audi, BMW, Mercedes-Benz, and more."},
+      {"title": "Forum", "description": "Topics by brand and model, images, replies, and community voting."},
+      {"title": "AI mechanic", "description": "Possible causes, severity, recommendations, and a clear professional diagnostics disclaimer."}
+    ]
+  }
+}

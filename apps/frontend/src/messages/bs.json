@@ -1,0 +1,46 @@
+{
+  "navigation": {
+    "language": "Promijeni jezik"
+  },
+  "home": {
+    "brand": "Vozilo.ba",
+    "market": "Bosna i Hercegovina",
+    "navLabel": "Glavna navigacija",
+    "login": "Prijava",
+    "eyebrow": "Servisna historija, troškovi i zajednica na jednom mjestu",
+    "headline": "Pametno upravljanje vozilom za stvarne vozače u BiH.",
+    "subheadline": "Pratite održavanje, registraciju, osiguranje, kvarove, preporuke radionica i savjete AI mehaničara uz jasnu lokalizaciju od prvog dana.",
+    "primaryAction": "Dodaj vozilo",
+    "secondaryAction": "Pronađi radionicu",
+    "stats": [
+      {"value": "1", "label": "vozilo u besplatnom planu"},
+      {"value": "80%+", "label": "ciljana test pokrivenost"},
+      {"value": "2", "label": "jezika od prve verzije"}
+    ],
+    "dashboard": {
+      "vehicleLabel": "Aktivno vozilo",
+      "vehicle": "Škoda Karoq 2.0 TDI",
+      "status": "Uredno",
+      "mileage": "Kilometraža",
+      "costs": "Troškovi ove godine",
+      "remindersTitle": "Sljedeći podsjetnici"
+    },
+    "reminders": [
+      "Registracija ističe za 28 dana",
+      "Zamjena ulja za 1.600 km",
+      "Pregled kočnica preporučen ovaj mjesec"
+    ],
+    "modulesEyebrow": "Moduli",
+    "modulesTitle": "Osnova platforme",
+    "modules": [
+      {"title": "Vozila", "description": "Marka, model, godina, motor, VIN, tablice i trenutna kilometraža."},
+      {"title": "Servisna historija", "description": "Ulje, zupčasti remen, DSG, kočnice, gume, akumulator i prilagođeni zapisi."},
+      {"title": "Troškovi", "description": "Gorivo, servis, osiguranje, registracija, gume i mjesečna statistika."},
+      {"title": "Podsjetnici", "description": "Automatski rokovi za registraciju, osiguranje i servisne intervale."},
+      {"title": "Radionice", "description": "Pretraga po gradu, kategoriji i specijalizaciji za brend."},
+      {"title": "Ovlašteni servisi", "description": "Posebne stranice za VW, Škodu, Audi, BMW, Mercedes-Benz i druge."},
+      {"title": "Forum", "description": "Teme po brendu i modelu, slike, odgovori i glasanje zajednice."},
+      {"title": "AI mehaničar", "description": "Mogući uzroci, ozbiljnost, preporuke i jasna napomena o profesionalnoj dijagnostici."}
+    ]
+  }
+}
