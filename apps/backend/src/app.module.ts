@@ -3,6 +3,7 @@ import {ConfigModule} from '@nestjs/config';
 import {JwtModule} from '@nestjs/jwt';
 import {AppController} from './app.controller';
 import {AiController} from './ai';
+import {AdminController} from './admin';
 import {BillingController} from './billing';
 import {AuthController, AuthService} from './auth';
 import {ForumController} from './forum';
@@ -16,6 +17,7 @@ import {VehiclesController} from './vehicles';
   imports: [ConfigModule.forRoot({isGlobal: true}), JwtModule.register({}), PrismaModule],
   controllers: [
     AppController,
+    AdminController,
     AuthController,
     VehiclesController,
     ReportsController,

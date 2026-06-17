@@ -96,8 +96,22 @@ type Vehicle = {
 type User = {
   email: string;
   name?: string | null;
+  role: string;
   plan: string;
   trialEndsAt?: string | null;
+};
+
+type AdminUser = {
+  id: string;
+  email: string;
+  name?: string | null;
+  role: string;
+  plan: string;
+  trialEndsAt?: string | null;
+  _count?: {
+    vehicles: number;
+    topics: number;
+  };
 };
 
 type ForumTopic = {
@@ -189,6 +203,7 @@ export function HomeClient({copy}: {copy: Copy}) {
   const [issues, setIssues] = useState<CommonIssue[]>([]);
   const [timeline, setTimeline] = useState<MaintenanceItem[]>([]);
   const [topicForm, setTopicForm] = useState({brand: 'Volkswagen', model: 'Golf 7', title: 'DSG vibration at low speed'});
+  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
 
   const authed = Boolean(token);
   const trialLabel = useMemo(() => {
@@ -227,14 +242,24 @@ export function HomeClient({copy}: {copy: Copy}) {
   async function submitAuth() {
     try {
       setMessage('');
+      const payload =
+        mode === 'register'
+          ? authForm
+          : {
+              email: authForm.email,
+              password: authForm.password
+            };
       const data = await api(`/auth/${mode}`, {
         method: 'POST',
-        body: JSON.stringify(authForm)
+        body: JSON.stringify(payload)
       });
       window.localStorage.setItem('vozilo_token', data.accessToken);
       setToken(data.accessToken);
       setUser(data.user);
       await loadMe(data.accessToken);
+      if (data.user?.role === 'SUPERADMIN') {
+        await loadAdminUsers(data.accessToken);
+      }
       setMessage(mode === 'register' ? 'Account created. Free trial active.' : 'Logged in.');
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Auth failed');
@@ -250,6 +275,9 @@ export function HomeClient({copy}: {copy: Copy}) {
     const data = await response.json();
     setUser(data);
     setVehicles(data.vehicles || []);
+    if (data.role === 'SUPERADMIN') {
+      await loadAdminUsers(nextToken);
+    }
   }
 
   async function startGoogle() {
@@ -349,6 +377,34 @@ export function HomeClient({copy}: {copy: Copy}) {
       setTimeline(await api('/maintenance/timeline'));
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Timeline failed');
+    }
+  }
+
+  async function loadAdminUsers(nextToken = token) {
+    if (!nextToken) return;
+    try {
+      const response = await fetch(`${apiBase}/admin/users`, {
+        headers: {
+          Authorization: `Bearer ${nextToken}`
+        }
+      });
+      if (!response.ok) return;
+      setAdminUsers(await response.json());
+    } catch {
+      // Ignore admin panel bootstrap failures in the public shell.
+    }
+  }
+
+  async function updateUserAccess(userId: string, payload: {plan?: string; role?: string}) {
+    try {
+      await api(`/admin/users/${userId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(payload)
+      });
+      await loadAdminUsers();
+      setMessage('User access updated.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'User access update failed');
     }
   }
 
@@ -822,6 +878,51 @@ export function HomeClient({copy}: {copy: Copy}) {
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+        {user?.role === 'SUPERADMIN' ? (
+          <Card className="mb-6 p-5">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-black">Super admin</h2>
+                <p className="mt-1 text-sm text-muted">Manage user plans and elevated access from the same dashboard.</p>
+              </div>
+              <Button variant="secondary" onClick={() => loadAdminUsers()}>
+                Refresh users
+              </Button>
+            </div>
+            <div className="mt-5 grid gap-3">
+              {adminUsers.map((adminUser) => (
+                <div key={adminUser.id} className="rounded-lg border border-border bg-white/[0.04] p-4">
+                  <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                    <div>
+                      <p className="font-black">{adminUser.name || adminUser.email}</p>
+                      <p className="text-sm text-muted">{adminUser.email}</p>
+                      <p className="mt-1 text-xs text-muted">
+                        {adminUser.role} | {adminUser.plan} | {adminUser._count?.vehicles ?? 0} vehicles | {adminUser._count?.topics ?? 0} topics
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <Button variant="secondary" onClick={() => updateUserAccess(adminUser.id, {plan: 'FREE'})}>
+                        Free
+                      </Button>
+                      <Button variant="secondary" onClick={() => updateUserAccess(adminUser.id, {plan: 'PREMIUM'})}>
+                        Premium
+                      </Button>
+                      <Button variant="secondary" onClick={() => updateUserAccess(adminUser.id, {plan: 'BUSINESS'})}>
+                        Business
+                      </Button>
+                      <Button variant="secondary" onClick={() => updateUserAccess(adminUser.id, {role: 'USER'})}>
+                        User
+                      </Button>
+                      <Button variant="secondary" onClick={() => updateUserAccess(adminUser.id, {role: 'SUPERADMIN'})}>
+                        Superadmin
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        ) : null}
         <h2 className="mb-4 text-2xl font-black">{copy.newFeaturesTitle}</h2>
         <div className="mb-8 grid gap-3 md:grid-cols-3">
           {['Service reminders timeline', 'Workshop shortlist', 'Common issue voting'].map((feature) => (

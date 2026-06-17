@@ -12,6 +12,7 @@ import {
 import {ConfigService} from '@nestjs/config';
 import {JwtService} from '@nestjs/jwt';
 import {ApiBearerAuth, ApiTags} from '@nestjs/swagger';
+import {UserRole} from '@prisma/client';
 import {IsEmail, IsOptional, IsString, MinLength} from 'class-validator';
 import * as bcrypt from 'bcrypt';
 import {PrismaService} from './prisma/prisma.service';
@@ -88,6 +89,7 @@ export class AuthService {
         email: true,
         name: true,
         locale: true,
+        role: true,
         plan: true,
         trialEndsAt: true,
         vehicles: {
@@ -214,12 +216,34 @@ export class AuthService {
     }
   }
 
-  private authResponse(user: {id: string; email: string; name: string | null; plan: string; trialEndsAt: Date | null}) {
+  async requireSuperAdmin(authorization?: string) {
+    const userId = this.userIdFromHeader(authorization);
+    const user = await this.prisma.user.findUnique({
+      where: {id: userId},
+      select: {id: true, role: true}
+    });
+
+    if (!user || user.role !== UserRole.SUPERADMIN) {
+      throw new HttpException('Super admin access required', HttpStatus.FORBIDDEN);
+    }
+
+    return user.id;
+  }
+
+  private authResponse(user: {
+    id: string;
+    email: string;
+    name: string | null;
+    role: UserRole;
+    plan: string;
+    trialEndsAt: Date | null;
+  }) {
     return {
       accessToken: this.jwt.sign(
         {
           sub: user.id,
-          email: user.email
+          email: user.email,
+          role: user.role
         },
         {
           secret: this.jwtSecret(),
@@ -230,6 +254,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
         name: user.name,
+        role: user.role,
         plan: user.plan,
         trialEndsAt: user.trialEndsAt
       }

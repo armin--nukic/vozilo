@@ -13,6 +13,11 @@ enum UserPlan {
   BUSINESS
 }
 
+enum UserRole {
+  USER
+  SUPERADMIN
+}
+
 enum MaintenanceCategory {
   OIL_CHANGE
   TIMING_BELT
@@ -52,6 +57,7 @@ model User {
   googleId     String?   @unique
   name         String?
   locale       String    @default("bs")
+  role         UserRole  @default(USER)
   plan         UserPlan  @default(FREE)
   trialEndsAt  DateTime?
   vehicles     Vehicle[]
