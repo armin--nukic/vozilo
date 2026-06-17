@@ -248,6 +248,69 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
+    location /auth/ {
+        proxy_pass http://127.0.0.1:4200/auth/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /vehicles {
+        proxy_pass http://127.0.0.1:4200/vehicles;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /reports/ {
+        proxy_pass http://127.0.0.1:4200/reports/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /ai/ {
+        proxy_pass http://127.0.0.1:4200/ai/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /billing/ {
+        proxy_pass http://127.0.0.1:4200/billing/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /forum/ {
+        proxy_pass http://127.0.0.1:4200/forum/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location = /plans {
+        proxy_pass http://127.0.0.1:4200/plans;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
     location / {
         proxy_pass http://127.0.0.1:3200;
         proxy_http_version 1.1;
@@ -264,6 +327,7 @@ Zasto ovako:
 - `/api` ide na backend jer je Swagger trenutno na backend ruti `/api`
 - `/health` ide na backend
 - `/modules` ide na backend jer trenutni scaffold ima tu backend rutu
+- `/auth`, `/vehicles`, `/reports`, `/ai`, `/forum`, `/billing` i `/plans` idu na backend jer ih koristi aplikacija
 - sve ostalo ide na frontend, ukljucujuci `/`, `/bs`, `/en`, `_next` fajlove i statiku
 
 Aktiviraj config:

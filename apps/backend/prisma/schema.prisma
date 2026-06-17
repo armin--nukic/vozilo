@@ -48,10 +48,12 @@ model User {
   updatedAt    DateTime  @updatedAt
   deletedAt    DateTime?
   email        String    @unique
-  passwordHash String
+  passwordHash String?
+  googleId     String?   @unique
   name         String?
   locale       String    @default("bs")
   plan         UserPlan  @default(FREE)
+  trialEndsAt  DateTime?
   vehicles     Vehicle[]
   topics       ForumTopic[]
   replies      ForumReply[]

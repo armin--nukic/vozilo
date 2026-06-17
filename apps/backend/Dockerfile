@@ -19,4 +19,4 @@ COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
 COPY --from=builder /app/apps/backend/package.json ./apps/backend/package.json
 COPY --from=builder /app/apps/backend/prisma ./apps/backend/prisma
 EXPOSE 3001
-CMD ["node", "apps/backend/dist/main.js"]
+CMD ["sh", "-c", "npx prisma db push --schema apps/backend/prisma/schema.prisma --accept-data-loss --skip-generate && node apps/backend/dist/main.js"]

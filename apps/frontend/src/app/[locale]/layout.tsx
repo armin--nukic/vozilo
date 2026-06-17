@@ -1,12 +1,12 @@
 import type {Metadata} from 'next';
 import {NextIntlClientProvider} from 'next-intl';
 import {getMessages, setRequestLocale} from 'next-intl/server';
-import {Inter} from 'next/font/google';
+import {Manrope} from 'next/font/google';
 import {notFound} from 'next/navigation';
 import {locales, type Locale} from '@/i18n/config';
 import '../globals.css';
 
-const inter = Inter({subsets: ['latin', 'latin-ext']});
+const manrope = Manrope({subsets: ['latin', 'latin-ext']});
 
 export const metadata: Metadata = {
   title: 'Vozilo.ba',
@@ -39,7 +39,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} className="dark">
-      <body className={inter.className}>
+      <body className={manrope.className}>
         <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
       </body>
     </html>
