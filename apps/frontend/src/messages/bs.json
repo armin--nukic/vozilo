@@ -60,6 +60,8 @@
       "issuesAction": "Učitaj kvarove",
       "costEstimate": "Procjena troška",
       "severity": "Ozbiljnost",
+      "timelineTitle": "Servisni timeline",
+      "timelineAction": "Učitaj servisne stavke",
       "modulesTitle": "Šta platforma pokriva",
       "modules": [
         {"title": "Vozila", "description": "Marka, model, godina, motor, tablice i kilometraža."},

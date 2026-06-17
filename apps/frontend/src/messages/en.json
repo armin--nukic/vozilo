@@ -60,6 +60,8 @@
       "issuesAction": "Load issues",
       "costEstimate": "Cost estimate",
       "severity": "Severity",
+      "timelineTitle": "Service timeline",
+      "timelineAction": "Load service items",
       "modulesTitle": "What the platform covers",
       "modules": [
         {"title": "Vehicles", "description": "Make, model, year, engine, license plate, and mileage."},

@@ -77,6 +77,8 @@ type Copy = {
   issuesAction: string;
   costEstimate: string;
   severity: string;
+  timelineTitle: string;
+  timelineAction: string;
   modulesTitle: string;
   modules: {title: string; description: string}[];
 };
@@ -119,7 +121,14 @@ type CommonIssue = {
   recommendedAction: string;
 };
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+type MaintenanceItem = {
+  id: string;
+  title: string;
+  vehicle: string;
+  dueIn: string;
+  severity: string;
+};
+
 const makes = ['Volkswagen', 'Skoda', 'Audi', 'BMW', 'Mercedes-Benz', 'Toyota', 'Hyundai', 'Kia', 'Renault'];
 const makeMarks: Record<string, string> = {
   Volkswagen: 'VW',
@@ -148,11 +157,11 @@ const makeShapes: Record<string, string> = {
   Skoda: 'rounded-[38%]',
   Audi: 'rounded-full',
   BMW: 'rounded-full',
-  'Mercedes-Benz': 'rounded-xl rotate-45',
+  'Mercedes-Benz': 'rounded-xl',
   Toyota: 'rounded-full',
   Hyundai: 'rounded-[45%]',
   Kia: 'rounded-2xl',
-  Renault: 'rounded-md rotate-45'
+  Renault: 'rounded-md'
 };
 
 export function HomeClient({copy}: {copy: Copy}) {
@@ -178,6 +187,7 @@ export function HomeClient({copy}: {copy: Copy}) {
   const [aiResult, setAiResult] = useState<Record<string, unknown> | null>(null);
   const [forumTopics, setForumTopics] = useState<ForumTopic[]>([]);
   const [issues, setIssues] = useState<CommonIssue[]>([]);
+  const [timeline, setTimeline] = useState<MaintenanceItem[]>([]);
   const [topicForm, setTopicForm] = useState({brand: 'Volkswagen', model: 'Golf 7', title: 'DSG vibration at low speed'});
 
   const authed = Boolean(token);
@@ -186,6 +196,11 @@ export function HomeClient({copy}: {copy: Copy}) {
     return `${copy.trial}: ${new Date(user.trialEndsAt).toLocaleDateString()}`;
   }, [copy.trial, user?.trialEndsAt]);
 
+  const apiBase =
+    typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+      ? process.env.NEXT_PUBLIC_API_URL || `${window.location.origin}/api`
+      : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4444';
+
   function setTheme(nextDark: boolean) {
     setDark(nextDark);
     document.documentElement.classList.toggle('light', !nextDark);
@@ -193,7 +208,7 @@ export function HomeClient({copy}: {copy: Copy}) {
   }
 
   async function api(path: string, options: RequestInit = {}) {
-    const response = await fetch(`${apiUrl}${path}`, {
+    const response = await fetch(`${apiBase}${path}`, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
@@ -228,7 +243,7 @@ export function HomeClient({copy}: {copy: Copy}) {
 
   async function loadMe(nextToken = token) {
     if (!nextToken) return;
-    const response = await fetch(`${apiUrl}/auth/me`, {
+    const response = await fetch(`${apiBase}/auth/me`, {
       headers: {Authorization: `Bearer ${nextToken}`}
     });
     if (!response.ok) return;
@@ -326,6 +341,14 @@ export function HomeClient({copy}: {copy: Copy}) {
       }
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Checkout failed');
+    }
+  }
+
+  async function loadTimeline() {
+    try {
+      setTimeline(await api('/maintenance/timeline'));
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Timeline failed');
     }
   }
 
@@ -534,6 +557,35 @@ export function HomeClient({copy}: {copy: Copy}) {
         </Card>
 
         <div className="grid gap-4">
+          <Card className="p-5">
+            <div className="mb-4 flex items-center justify-between gap-4">
+              <h2 className="text-xl font-black">{copy.timelineTitle}</h2>
+              <Button variant="secondary" onClick={loadTimeline}>
+                {copy.timelineAction}
+              </Button>
+            </div>
+            <div className="grid gap-3">
+              {(timeline.length
+                ? timeline
+                : [
+                    {id: 'oil-service', title: 'Oil service', vehicle: 'Volkswagen Golf 7 2.0 TDI', dueIn: '1,600 km', severity: 'medium'},
+                    {id: 'registration', title: 'Registration renewal', vehicle: 'Skoda Karoq 2.0 TDI', dueIn: '28 days', severity: 'high'}
+                  ]
+              ).map((item) => (
+                <div key={item.id} className="flex items-center justify-between gap-4 rounded-lg border border-border bg-white/[0.04] p-4">
+                  <div>
+                    <p className="font-bold">{item.title}</p>
+                    <p className="text-sm text-muted">{item.vehicle}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-black text-primary">{item.dueIn}</p>
+                    <p className="text-xs text-muted">{item.severity}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+
           <Card className="p-5">
             <div className="flex items-center justify-between gap-4">
               <h2 className="text-xl font-black">{copy.garage}</h2>

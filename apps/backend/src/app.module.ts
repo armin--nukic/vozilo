@@ -7,6 +7,7 @@ import {BillingController} from './billing';
 import {AuthController, AuthService} from './auth';
 import {ForumController} from './forum';
 import {IssuesController} from './issues';
+import {MaintenanceController} from './maintenance';
 import {PrismaModule} from './prisma/prisma.module';
 import {ReportsController} from './reports';
 import {VehiclesController} from './vehicles';
@@ -21,6 +22,7 @@ import {VehiclesController} from './vehicles';
     ForumController,
     AiController,
     IssuesController,
+    MaintenanceController,
     BillingController
   ],
   providers: [AuthService]

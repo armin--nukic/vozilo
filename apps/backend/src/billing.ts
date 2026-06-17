@@ -21,7 +21,7 @@ export class BillingController {
   @Post('checkout')
   async checkout(@Body() dto: CheckoutDto) {
     const secretKey = this.config.get<string>('STRIPE_SECRET_KEY');
-    const frontendOrigin = this.config.get<string>('FRONTEND_ORIGIN') ?? 'http://localhost:3000';
+    const frontendOrigin = this.config.get<string>('FRONTEND_ORIGIN') ?? 'http://localhost:3333';
     const priceId =
       dto.plan === 'premium'
         ? this.config.get<string>('STRIPE_PREMIUM_PRICE_ID')

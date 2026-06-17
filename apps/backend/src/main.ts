@@ -11,7 +11,7 @@ async function bootstrap() {
 
   app.use(helmet());
   app.enableCors({
-    origin: config.get<string>('FRONTEND_ORIGIN', 'http://localhost:3000'),
+    origin: config.get<string>('FRONTEND_ORIGIN', 'http://localhost:3333'),
     credentials: true
   });
   app.useGlobalPipes(

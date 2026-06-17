@@ -284,7 +284,7 @@ export class AuthController {
     }
 
     const result = await this.auth.googleCallback(code);
-    const frontend = this.config.get<string>('FRONTEND_ORIGIN') ?? 'http://localhost:3000';
+    const frontend = this.config.get<string>('FRONTEND_ORIGIN') ?? 'http://localhost:3333';
     return {
       ...result,
       nextStep: `Save accessToken in the frontend and redirect to ${frontend}`
